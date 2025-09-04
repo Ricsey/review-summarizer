@@ -3,7 +3,7 @@ import { chatController } from './controllers/chat.controller';
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response): void => {
+router.get('/api/hello', (req: Request, res: Response): void => {
   res.json({ message: 'Hello World!' })
 })
 
