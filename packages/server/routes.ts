@@ -1,12 +1,12 @@
-import express, { type Request, type Response } from 'express'
+import express, { type Request, type Response } from 'express';
 import { chatController } from './controllers/chat.controller';
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/api/hello', (req: Request, res: Response): void => {
-  res.json({ message: 'Hello World!' })
-})
+  res.json({ message: 'Hello World!' });
+});
 
-router.post('/api/chat', chatController.sendMessage)
+router.post('/api/chat', chatController.sendMessage);
 
-export default router
+export default router;
