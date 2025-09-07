@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ReviewStarRating from './ReviewStarRating';
 
 type Props = {
   productId: number;
@@ -22,7 +23,6 @@ const ReviewList = ({ productId }: Props) => {
   const [reviewData, setReviewData] = useState<GetReviewsResponse>();
 
   const fetchReviews = async () => {
-    console.log('fetchReviews called with', productId);
     const { data } = await axios.get<GetReviewsResponse>(
       `/api/products/${productId}/reviews`
     );
@@ -38,7 +38,7 @@ const ReviewList = ({ productId }: Props) => {
       {reviewData?.reviews.map((review) => (
         <div key={review.id}>
           <div className="font-semibold">{review.author}</div>
-          <div>Rating: {review.rating}/5</div>
+          <ReviewStarRating value={review.rating} />
           <p className="py-2">{review.content}</p>
         </div>
       ))}
