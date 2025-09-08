@@ -4,6 +4,7 @@ import ReviewStarRating from './ReviewStarRating';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../ui/button';
 import { HiSparkles } from 'react-icons/hi2';
+import { useState } from 'react';
 
 type Props = {
   productId: number;
@@ -22,7 +23,13 @@ type GetReviewsResponse = {
   reviews: Review[];
 };
 
+type SummarizeResponse = {
+  summary: string;
+};
+
 const ReviewList = ({ productId }: Props) => {
+  const [summary, setSummary] = useState('');
+
   const {
     data: reviewData,
     isLoading,
@@ -32,6 +39,12 @@ const ReviewList = ({ productId }: Props) => {
     queryFn: () => fetchReviews(),
   });
 
+  const handleSummarize = async () => {
+    const { data } = await axios.post<SummarizeResponse>(
+      `/api/products/${productId}/summarize`
+    );
+    setSummary(data.summary);
+  };
   const fetchReviews = async () => {
     const { data } = await axios.get<GetReviewsResponse>(
       `/api/products/${productId}/reviews`
@@ -57,17 +70,19 @@ const ReviewList = ({ productId }: Props) => {
     return <p className="text-red-500">Could not fetch reviews. Try again!</p>;
   }
 
-  if (reviewData?.reviews.length) {
+  if (!reviewData?.reviews.length) {
     return null;
   }
+
+  const currentSummary = reviewData.summary || summary;
 
   return (
     <div>
       <div className="mb-5">
-        {reviewData?.summary ? (
-          <p>{reviewData?.summary}</p>
+        {currentSummary ? (
+          <p>{currentSummary}</p>
         ) : (
-          <Button>
+          <Button onClick={handleSummarize}>
             <HiSparkles />
             Summarize
           </Button>
