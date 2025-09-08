@@ -11,13 +11,21 @@ const backendPort = process.env.BACKEND_PORT || '3000';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react({
+      include: '**/*.tsx',
+    }),
+    tailwindcss(),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
   server: {
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       // '/api': 'http://localhost:3000'
       '/api': `http://${baseUri}:${backendPort}`,
